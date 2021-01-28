@@ -1,0 +1,9 @@
+﻿<Application x:Class="Petruta_Andrei_Nicolae_Proiect_Librarie_Online.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Petruta_Andrei_Nicolae_Proiect_Librarie_Online"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
