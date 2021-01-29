@@ -33,9 +33,14 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
     public partial class MainWindow : Window
     {
         // using LibrarieModel
-        ActionState action = ActionState.Nothing;
+
+        ActionState actionClienti = ActionState.Nothing;
+        ActionState actionInventar = ActionState.Nothing;
+
         LibrarieEntitiesModel ctx = new LibrarieEntitiesModel();
         CollectionViewSource clientiViewSource;
+        CollectionViewSource inventarViewSource;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -49,9 +54,10 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
             clientiViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("clientiViewSource")));
             clientiViewSource.Source = ctx.Clientis.Local;
             ctx.Clientis.Load();
-            System.Windows.Data.CollectionViewSource inventarViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("inventarViewSource")));
-            // Load data by setting the CollectionViewSource.Source property:
-            // inventarViewSource.Source = [generic data source]
+            //using System.Data.Entity
+            inventarViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("inventarViewSource")));
+            inventarViewSource.Source = ctx.Inventars.Local;
+            ctx.Inventars.Load();
         }
 
 
@@ -68,7 +74,7 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
 
         private void btnNou_Click(object sender, RoutedEventArgs e)
         {
-            action = ActionState.New;
+            actionClienti = ActionState.New;
             btnNou.IsEnabled = false;
             btnEditare.IsEnabled = false;
             btnStergere.IsEnabled = false;
@@ -95,7 +101,7 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
 
         private void btnEditare_Click(object sender, RoutedEventArgs e)
         {
-            action = ActionState.Edit;
+            actionClienti = ActionState.Edit;
             string tempFirstName = numeTextBox.Text.ToString();
             string tempLastName = prenumeTextBox.Text.ToString();
             string tempTelephone = telefonTextBox.Text.ToString();
@@ -126,7 +132,7 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
 
         private void btnStergere_Click(object sender, RoutedEventArgs e)
         {
-            action = ActionState.Delete;
+            actionClienti = ActionState.Delete;
             string tempFirstName = numeTextBox.Text.ToString();
             string tempLastName = prenumeTextBox.Text.ToString();
             string tempTelephone = telefonTextBox.Text.ToString();
@@ -152,7 +158,7 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
 
         private void btnAnulare_Click(object sender, RoutedEventArgs e)
         {
-            action = ActionState.Nothing;
+            actionClienti = ActionState.Nothing;
 
             btnNou.IsEnabled = true;
             btnEditare.IsEnabled = true;
@@ -164,16 +170,21 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
             btnPrecedentul.IsEnabled = true;
             btnUrmatorul.IsEnabled = true;
 
+            numeTextBox.Text = "";
+            prenumeTextBox.Text = "";
+            telefonTextBox.Text = "";
 
-            numeTextBox.IsEnabled = false;
-            prenumeTextBox.IsEnabled = false;
-            telefonTextBox.IsEnabled = false;
+
+            numeTextBox.IsEnabled = true;
+            prenumeTextBox.IsEnabled = true;
+            telefonTextBox.IsEnabled = true;
+
         }
 
         private void btnSalvare_Click(object sender, RoutedEventArgs e)
         {
             Clienti customer = null;
-            if (action == ActionState.New)
+            if (actionClienti == ActionState.New)
             {
                 try
                 {
@@ -203,11 +214,16 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
                 btnStergere.IsEnabled = true;
                 btnPrecedentul.IsEnabled = true;
                 btnUrmatorul.IsEnabled = true;
-                numeTextBox.IsEnabled = false;
-                prenumeTextBox.IsEnabled = false;
-                telefonTextBox.IsEnabled = false;
+
+                numeTextBox.Text = "";
+                prenumeTextBox.Text = "";
+                telefonTextBox.Text = "";
+
+                numeTextBox.IsEnabled = true;
+                prenumeTextBox.IsEnabled = true;
+                telefonTextBox.IsEnabled = true;
             }
-            else if (action == ActionState.Edit)
+            else if (actionClienti == ActionState.Edit)
             {
                 try
                 {
@@ -233,11 +249,16 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
                 btnStergere.IsEnabled = true;
                 btnPrecedentul.IsEnabled = true;
                 btnUrmatorul.IsEnabled = true;
-                numeTextBox.IsEnabled = false;
-                prenumeTextBox.IsEnabled = false;
-                telefonTextBox.IsEnabled = false;
+
+                numeTextBox.Text = "";
+                prenumeTextBox.Text = "";
+                telefonTextBox.Text = "";
+
+                numeTextBox.IsEnabled = true;
+                prenumeTextBox.IsEnabled = true;
+                telefonTextBox.IsEnabled = true;
             }
-            else if (action == ActionState.Delete)
+            else if (actionClienti == ActionState.Delete)
             {
                 try
                 {
@@ -256,10 +277,259 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
                 btnAnulare.IsEnabled = false;
                 btnPrecedentul.IsEnabled = true;
                 btnUrmatorul.IsEnabled = true;
-                numeTextBox.IsEnabled = false;
-                prenumeTextBox.IsEnabled = false;
-                telefonTextBox.IsEnabled = false;
+
+                numeTextBox.Text = "";
+                prenumeTextBox.Text = "";
+                telefonTextBox.Text = "";
+
+                numeTextBox.IsEnabled = true;
+                prenumeTextBox.IsEnabled = true;
+                telefonTextBox.IsEnabled = true;
             }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // tab-ul Clienti
+        private void btnUrmatorulI_Click(object sender, RoutedEventArgs e)
+        {
+            inventarViewSource.View.MoveCurrentToNext();
+        }
+
+        private void btnPrecedentulI_Click(object sender, RoutedEventArgs e)
+        {
+            inventarViewSource.View.MoveCurrentToPrevious();
+        }
+
+        private void btnNouI_Click(object sender, RoutedEventArgs e)
+        {
+            actionInventar = ActionState.New;
+            btnNouI.IsEnabled = false;
+            btnEditareI.IsEnabled = false;
+            btnStergereI.IsEnabled = false;
+
+            btnSalvareI.IsEnabled = true;
+            btnAnulareI.IsEnabled = true;
+
+            btnPrecedentulI.IsEnabled = false;
+            btnUrmatorulI.IsEnabled = false;
+
+            titluTextBox.IsEnabled = true;
+            autorTextBox.IsEnabled = true;
+            pretTextBox.IsEnabled = true;
+
+            BindingOperations.ClearBinding(titluTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(autorTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(pretTextBox, TextBox.TextProperty);
+
+            titluTextBox.Text = "";
+            autorTextBox.Text = "";
+            pretTextBox.Text = "";
+            Keyboard.Focus(titluTextBox);
+        }
+
+        private void btnEditareI_Click(object sender, RoutedEventArgs e)
+        {
+            actionInventar = ActionState.Edit;
+            string tempTitle = titluTextBox.Text.ToString();
+            string tempAuthor = autorTextBox.Text.ToString();
+            string tempPrice = pretTextBox.Text.ToString();
+
+            btnNouI.IsEnabled = false;
+            btnEditareI.IsEnabled = false;
+            btnStergereI.IsEnabled = false;
+
+            btnSalvareI.IsEnabled = true;
+            btnAnulareI.IsEnabled = true;
+
+            btnPrecedentulI.IsEnabled = false;
+            btnUrmatorulI.IsEnabled = false;
+
+            titluTextBox.IsEnabled = true;
+            autorTextBox.IsEnabled = true;
+            pretTextBox.IsEnabled = true;
+
+            BindingOperations.ClearBinding(titluTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(autorTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(pretTextBox, TextBox.TextProperty);
+
+            titluTextBox.Text = tempTitle;
+            autorTextBox.Text = tempAuthor;
+            pretTextBox.Text = tempPrice;
+            Keyboard.Focus(titluTextBox);
+        }
+
+        private void btnStergereI_Click(object sender, RoutedEventArgs e)
+        {
+            actionInventar = ActionState.Delete;
+            string tempTitle = titluTextBox.Text.ToString();
+            string tempAuthor = autorTextBox.Text.ToString();
+            string tempPrice = pretTextBox.Text.ToString();
+
+            btnNouI.IsEnabled = false;
+            btnEditareI.IsEnabled = false;
+            btnStergereI.IsEnabled = false;
+
+            btnSalvareI.IsEnabled = true;
+            btnAnulareI.IsEnabled = true;
+
+            btnPrecedentulI.IsEnabled = false;
+            btnUrmatorulI.IsEnabled = false;
+
+            BindingOperations.ClearBinding(titluTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(autorTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(pretTextBox, TextBox.TextProperty);
+
+            titluTextBox.Text = tempTitle;
+            autorTextBox.Text = tempAuthor;
+            pretTextBox.Text = tempPrice;
+        }
+
+        private void btnAnulareI_Click(object sender, RoutedEventArgs e)
+        {
+            actionInventar = ActionState.Nothing;
+
+            btnNouI.IsEnabled = true;
+            btnEditareI.IsEnabled = true;
+            btnStergereI.IsEnabled = true;
+
+            btnSalvareI.IsEnabled = false;
+            btnAnulareI.IsEnabled = false;
+
+            btnPrecedentulI.IsEnabled = true;
+            btnUrmatorulI.IsEnabled = true;
+
+            titluTextBox.Text = "";
+            autorTextBox.Text = "";
+            pretTextBox.Text = "";
+
+
+            titluTextBox.IsEnabled = true;
+            autorTextBox.IsEnabled = true;
+            pretTextBox.IsEnabled = true;
+
+        }
+
+        private void btnSalvareI_Click(object sender, RoutedEventArgs e)
+        {
+            Inventar book = null;
+            if (actionInventar == ActionState.New)
+            {
+                try
+                {
+                    //instantiem Inventar entity
+                    book = new Inventar()
+                    {
+                        Autor = titluTextBox.Text.Trim(),
+                        Titlu = autorTextBox.Text.Trim(),
+                        Pret = int.Parse(pretTextBox.Text),
+                    };
+                    //adaugam entitatea nou creata in context
+                    ctx.Inventars.Add(book);
+                    inventarViewSource.View.Refresh();
+                    //salvam modificarile
+                    ctx.SaveChanges();
+                }
+                //using System.Data;
+                catch (DataException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                btnNouI.IsEnabled = true;
+                btnEditareI.IsEnabled = true;
+                btnSalvareI.IsEnabled = false;
+                btnAnulareI.IsEnabled = false;
+                btnStergereI.IsEnabled = true;
+                btnPrecedentulI.IsEnabled = true;
+                btnUrmatorulI.IsEnabled = true;
+
+                titluTextBox.Text = "";
+                autorTextBox.Text = "";
+                pretTextBox.Text = "";
+
+                titluTextBox.IsEnabled = true;
+                autorTextBox.IsEnabled = true;
+                pretTextBox.IsEnabled = true;
+            }
+            else if (actionInventar == ActionState.Edit)
+            {
+                try
+                {
+                    book = (Inventar)inventarDataGrid.SelectedItem;
+                    book.Titlu = titluTextBox.Text.Trim();
+                    book.Autor = autorTextBox.Text.Trim();
+                    book.Pret = int.Parse(pretTextBox.Text);
+                    //salvam modificarile
+                    ctx.SaveChanges();
+                }
+                catch (DataException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                // pozitionarea pe item-ul curent
+                inventarViewSource.View.Refresh();
+                inventarViewSource.View.MoveCurrentTo(book);
+                btnNouI.IsEnabled = true;
+                btnEditareI.IsEnabled = true;
+                btnSalvareI.IsEnabled = false;
+                btnAnulareI.IsEnabled = false;
+                btnStergereI.IsEnabled = true;
+                btnPrecedentulI.IsEnabled = true;
+                btnUrmatorulI.IsEnabled = true;
+
+                titluTextBox.Text = "";
+                autorTextBox.Text = "";
+                pretTextBox.Text = "";
+
+                titluTextBox.IsEnabled = true;
+                autorTextBox.IsEnabled = true;
+                pretTextBox.IsEnabled = true;
+            }
+            else if (actionInventar == ActionState.Delete)
+            {
+                try
+                {
+                    book = (Inventar)inventarDataGrid.SelectedItem;
+                    ctx.Inventars.Remove(book);
+                    ctx.SaveChanges();
+                }
+                catch (DataException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                inventarViewSource.View.Refresh();
+                btnNouI.IsEnabled = true;
+                btnEditareI.IsEnabled = true;
+                btnSalvareI.IsEnabled = false;
+                btnAnulareI.IsEnabled = false;
+                btnPrecedentulI.IsEnabled = true;
+                btnUrmatorulI.IsEnabled = true;
+
+                titluTextBox.Text = "";
+                autorTextBox.Text = "";
+                pretTextBox.Text = "";
+
+                titluTextBox.IsEnabled = true;
+                autorTextBox.IsEnabled = true;
+                pretTextBox.IsEnabled = true;
+            }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
     
