@@ -36,10 +36,13 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
 
         ActionState actionClienti = ActionState.Nothing;
         ActionState actionInventar = ActionState.Nothing;
+        ActionState actionComenzi = ActionState.Nothing;
 
         LibrarieEntitiesModel ctx = new LibrarieEntitiesModel();
         CollectionViewSource clientiViewSource;
         CollectionViewSource inventarViewSource;
+        CollectionViewSource clientiComenzisViewSource;
+
 
         public MainWindow()
         {
@@ -58,6 +61,18 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
             inventarViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("inventarViewSource")));
             inventarViewSource.Source = ctx.Inventars.Local;
             ctx.Inventars.Load();
+            //using System.Data.Entity
+            clientiComenzisViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("clientiComenzisViewSource")));
+            clientiComenzisViewSource.Source = ctx.Comenzis.Local;
+            ctx.Comenzis.Load();
+
+            cmbClienti.ItemsSource = ctx.Clientis.Local;
+            cmbClienti.DisplayMemberPath = "Prenume";
+            cmbClienti.SelectedValuePath = "ClientID";
+            cmbInventar.ItemsSource = ctx.Inventars.Local;
+            cmbInventar.DisplayMemberPath = "Titlu";
+            cmbInventar.SelectedValuePath = "CarteID";
+
         }
 
 
@@ -530,6 +545,201 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+
+
+
+
+
+
+
+
+
+
+        // tab-ul Comenzi
+        private void btnUrmatorulC_Click(object sender, RoutedEventArgs e)
+        {
+            clientiComenzisViewSource.View.MoveCurrentToNext();
+        }
+
+        private void btnPrecedentulC_Click(object sender, RoutedEventArgs e)
+        {
+            clientiComenzisViewSource.View.MoveCurrentToPrevious();
+        }
+
+        private void btnNouC_Click(object sender, RoutedEventArgs e)
+        {
+            actionComenzi = ActionState.New;
+            btnNouC.IsEnabled = false;
+            btnEditareC.IsEnabled = false;
+            btnStergereC.IsEnabled = false;
+
+            btnSalvareC.IsEnabled = true;
+            btnAnulareC.IsEnabled = true;
+
+            btnPrecedentulC.IsEnabled = false;
+            btnUrmatorulC.IsEnabled = false;
+        }
+
+        private void btnEditareC_Click(object sender, RoutedEventArgs e)
+        {
+            actionComenzi = ActionState.Edit;
+
+            btnNouC.IsEnabled = false;
+            btnEditareC.IsEnabled = false;
+            btnStergereC.IsEnabled = false;
+
+            btnSalvareC.IsEnabled = true;
+            btnAnulareC.IsEnabled = true;
+
+            btnPrecedentulC.IsEnabled = false;
+            btnUrmatorulC.IsEnabled = false;
+        }
+
+        private void btnStergereC_Click(object sender, RoutedEventArgs e)
+        {
+            actionComenzi = ActionState.Delete;
+
+            btnNouC.IsEnabled = false;
+            btnEditareC.IsEnabled = false;
+            btnStergereC.IsEnabled = false;
+
+            btnSalvareC.IsEnabled = true;
+            btnAnulareC.IsEnabled = true;
+
+            btnPrecedentulC.IsEnabled = false;
+            btnUrmatorulC.IsEnabled = false;
+        }
+
+        private void btnAnulareC_Click(object sender, RoutedEventArgs e)
+        {
+            actionComenzi = ActionState.Nothing;
+
+            btnNouC.IsEnabled = true;
+            btnEditareC.IsEnabled = true;
+            btnStergereC.IsEnabled = true;
+
+            btnSalvareC.IsEnabled = false;
+            btnAnulareC.IsEnabled = false;
+
+            btnPrecedentulC.IsEnabled = true;
+            btnUrmatorulC.IsEnabled = true;
+        }
+
+        private void btnSalvareC_Click(object sender, RoutedEventArgs e)
+        {
+            Comenzi order = null;
+            Comenzi selectedOrder = null;
+            if (actionComenzi == ActionState.New)
+            {
+                try
+                {
+                    //instantiem Comenzi entity
+                    Clienti customer = (Clienti)cmbClienti.SelectedItem;
+                    Inventar book = (Inventar)cmbInventar.SelectedItem;
+
+                    order = new Comenzi()
+                    {
+                        ClientID = customer.ClientId,
+                        CarteID = book.CarteId,
+                    };
+                    //adaugam entitatea nou creata in context
+                    ctx.Comenzis.Add(order);
+                    clientiComenzisViewSource.View.Refresh();
+                    //salvam modificarile
+                    ctx.SaveChanges();
+                }
+                //using System.Data;
+                catch (DataException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                
+                btnNouC.IsEnabled = true;
+                btnEditareC.IsEnabled = true;
+                btnSalvareC.IsEnabled = false;
+                btnAnulareC.IsEnabled = false;
+                btnStergereC.IsEnabled = true;
+                btnPrecedentulC.IsEnabled = true;
+                btnUrmatorulC.IsEnabled = true;
+            }
+            else if (actionComenzi == ActionState.Edit)
+            {
+                selectedOrder = (Comenzi)comenzisDataGrid.SelectedItem;
+
+
+                //customer = (Clienti)clientiDataGrid.SelectedItem;
+                //customer.Nume = numeTextBox.Text.Trim();
+                //customer.Prenume = prenumeTextBox.Text.Trim();
+                //customer.Telefon = telefonTextBox.Text.Trim();
+                try
+                {
+
+                    int curr_id = selectedOrder.ComandaId;
+                    var editedOrder = ctx.Comenzis.FirstOrDefault(s => s.ComandaId == curr_id);
+
+                    if (editedOrder != null)
+                    {
+                        Clienti customer = (Clienti)cmbClienti.SelectedItem;
+                        Inventar book = (Inventar)cmbInventar.SelectedItem;
+                        editedOrder.ClientID = customer.ClientId;// int.Parse(cmbClienti.SelectedValue.ToString());
+                        editedOrder.CarteID = book.CarteId;// int.Parse(cmbInventar.SelectedValue.ToString());
+                        ctx.SaveChanges();
+                    }
+                    //Clienti customer = (Clienti)cmbClienti.SelectedItem;
+                    //Inventar book = (Inventar)cmbInventar.SelectedItem;
+                    //order = (Comenzi)comenzisDataGrid.SelectedItem;
+                    //order.ClientID = customer;
+                    //order.Autor = autorTextBox.Text.Trim();
+                    //order.Pret = int.Parse(pretTextBox.Text);
+                    //salvam modificarile
+                    
+                }
+                catch (DataException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                // pozitionarea pe item-ul curent
+                clientiComenzisViewSource.View.Refresh();
+                clientiComenzisViewSource.View.MoveCurrentTo(selectedOrder);
+                
+                btnNouC.IsEnabled = true;
+                btnEditareC.IsEnabled = true;
+                btnSalvareC.IsEnabled = false;
+                btnAnulareC.IsEnabled = false;
+                btnStergereC.IsEnabled = true;
+                btnPrecedentulC.IsEnabled = true;
+                btnUrmatorulC.IsEnabled = true;
+            }
+            else if (actionComenzi == ActionState.Delete)
+            {
+                try
+                {
+                    selectedOrder = (Comenzi)comenzisDataGrid.SelectedItem;
+                    int curr_id = selectedOrder.ComandaId;
+                    var deletedOrder = ctx.Comenzis.FirstOrDefault(s => s.ComandaId == curr_id);
+
+                    if (deletedOrder != null)
+                    {
+                        ctx.Comenzis.Remove(deletedOrder);
+                        ctx.SaveChanges();
+                        MessageBox.Show("Comanda stearsa cu succes!", "Message");
+                    }
+                }
+                catch (DataException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                clientiComenzisViewSource.View.Refresh();
+                btnNouC.IsEnabled = true;
+                btnEditareC.IsEnabled = true;
+                btnSalvareC.IsEnabled = false;
+                btnAnulareC.IsEnabled = false;
+                btnPrecedentulC.IsEnabled = true;
+                btnUrmatorulC.IsEnabled = true;
+            }
         }
     }
     

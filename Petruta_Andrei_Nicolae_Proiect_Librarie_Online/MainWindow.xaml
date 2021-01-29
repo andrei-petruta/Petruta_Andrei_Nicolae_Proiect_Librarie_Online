@@ -99,13 +99,20 @@
                     <ComboBox x:Name="cmbInventar" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="528,55,0,0"/>
                     <TextBlock x:Name="clientiTxtBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Clienti" VerticalAlignment="Top" RenderTransformOrigin="0.361,0.448" Margin="219,34,0,0" FontWeight="Bold"/>
                     <TextBlock x:Name="inventarTxtBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Inventar" VerticalAlignment="Top" Margin="478,34,0,0" FontWeight="Bold"/>
-                    <DataGrid x:Name="comenzisDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="219,97,49.333,96" RowDetailsVisibilityMode="VisibleWhenSelected">
+                    <DataGrid x:Name="comenzisDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="219,137,49.333,56" RowDetailsVisibilityMode="VisibleWhenSelected">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="carteIDColumn1" Binding="{Binding CarteID}" Header="Carte ID" Width="SizeToHeader"/>
                             <DataGridTextColumn x:Name="clientIDColumn1" Binding="{Binding ClientID}" Header="Client ID" Width="SizeToHeader"/>
                             <DataGridTextColumn x:Name="comandaIdColumn" Binding="{Binding ComandaId}" Header="Comanda Id" Width="SizeToHeader"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Button x:Name="btnNouC" Content="Nou" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="35,34,0,0" Click="btnNouC_Click"/>
+                    <Button x:Name="btnEditareC" Content="Editare" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="35,86,0,0" Click="btnEditareC_Click"/>
+                    <Button x:Name="btnStergereC" Content="Stergere" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="35,137,0,0" Click="btnStergereC_Click"/>
+                    <Button x:Name="btnSalvareC" Content="Salvare" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="35,233,0,0" Click="btnSalvareC_Click"/>
+                    <Button x:Name="btnAnulareC" Content="Anulare" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="35,277,0,0" Click="btnAnulareC_Click"/>
+                    <Button x:Name="btnPrecedentulC" Content="Precedentul" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="219,277,0,0" Click="btnPrecedentulC_Click"/>
+                    <Button x:Name="btnUrmatorulC" Content="Urmatorul" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="573,277,0,0" Click="btnUrmatorulC_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
