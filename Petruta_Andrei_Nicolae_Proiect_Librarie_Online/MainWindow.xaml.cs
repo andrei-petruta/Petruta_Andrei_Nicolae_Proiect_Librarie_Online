@@ -445,8 +445,8 @@ namespace Petruta_Andrei_Nicolae_Proiect_Librarie_Online
                     //instantiem Inventar entity
                     book = new Inventar()
                     {
-                        Autor = titluTextBox.Text.Trim(),
-                        Titlu = autorTextBox.Text.Trim(),
+                        Titlu = titluTextBox.Text.Trim(),
+                        Autor = autorTextBox.Text.Trim(),
                         Pret = int.Parse(pretTextBox.Text),
                     };
                     //adaugam entitatea nou creata in context
